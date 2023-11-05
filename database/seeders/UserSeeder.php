@@ -19,5 +19,10 @@ class UserSeeder extends Seeder
                 'email' => 'admin@example.fr',
                 'role_id' => Role::query()->whereAlias('admin')->first()->id,
             ]);
+
+        User::factory()
+            ->create([
+                'role_id' => Role::query()->whereAlias('user')->first()->id,
+            ]);
     }
 }

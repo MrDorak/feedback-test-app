@@ -2,8 +2,13 @@
 
 namespace App\Console;
 
+use App\Console\KernelInvokable\ImportFeedback;
+use Exception;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class Kernel extends ConsoleKernel
 {
@@ -12,7 +17,17 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        // import whenever the schedule:run is called otherwise every hour in dev/prod environment
+        if (App::environment("local")) {
+            $schedule->call(new ImportFeedback);
+        } else {
+            $schedule->call(new ImportFeedback)
+                ->hourly()
+                ->onFailure(function (Exception $e) {
+                    Log::error($e->getMessage());
+                    mail('admin@example.fr', 'Import Feedback failed', '');
+                });
+        }
     }
 
     /**
