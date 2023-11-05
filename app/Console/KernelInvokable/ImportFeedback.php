@@ -42,6 +42,7 @@ class ImportFeedback
         }
 
         fclose($handle);
+
         try {
             // copy() is used for testing, using move() in production would be better to prevent duplicate entries
             // as there is no unique key on the feedback data
