@@ -5,12 +5,12 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputError from "@/Components/InputError.vue";
 
 const form = useForm({
-    file: null
+    feedback_file: null
 });
 
 const submit = () => {
     form.post(route('feedback.store'), {
-        onFinish: () => form.reset('file'),
+        onSuccess: () => form.reset('feedback_file'),
     });
 };
 </script>
@@ -32,11 +32,11 @@ const submit = () => {
                                 <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">Import feedback</h2>
                             </header>
 
-                            <form @submit.prevent="form.post(route('feedback.store'))" class="mt-6 space-y-6">
+                            <form @submit.prevent="submit" class="mt-6 space-y-6">
                                 <div>
-                                    <input type="file" @input="form.file = $event.target.files[0]" accept="text/csv" />
+                                    <input type="file" @input="form.feedback_file = $event.target.files[0]" accept="text/csv" />
 
-                                    <InputError class="mt-2" :message="form.errors.file" />
+                                    <InputError class="mt-2" :message="form.errors.feedback_file" />
 
                                     <progress v-if="form.progress" :value="form.progress.percentage" max="100">
                                         {{ form.progress.percentage }}%

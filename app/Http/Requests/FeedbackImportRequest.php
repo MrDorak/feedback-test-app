@@ -16,7 +16,8 @@ class FeedbackImportRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'file' => ['required'],
+            'feedback_file' => [auth()->check() ? 'required' : ''],
+            'feedback_text' => [auth()->check() ? '' : 'required'],
         ];
     }
 }
