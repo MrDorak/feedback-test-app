@@ -7,9 +7,12 @@ use App\Models\Feedback;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
+use App\Traits\ImportFeedbackFile;
 
 class FeedbackController extends Controller
 {
+    use ImportFeedbackFile;
+
     /**
      * Handle an incoming authentication request.
      */
@@ -19,34 +22,15 @@ class FeedbackController extends Controller
             $file = $request->validated('feedback_file');
 
             try {
-                $handle = fopen($file->getPathname(), "r");
+                $this->importFeedbackFile($file->getPathname());
             } catch (Exception $e) {
                 return Redirect::route('dashboard');
             }
-
-            try {
-                fgetcsv($handle); // skip first line as it contains the headers
-
-                while ( ($row = fgetcsv($handle)) !== false ) {
-                    Feedback::query()->create([
-                        'text' => $row[0],
-                        'rating' => $row[1],
-                        'start_date' => $row[2],
-                        'address' => $row[3],
-                        'appartments' => $row[4],
-                        'source' => $row[5],
-                    ]);
-                }
-            } catch (Exception $e) {
-                return Redirect::route('dashboard');
-            }
-
-            fclose($handle);
 
             return Redirect::route('dashboard');
         } else if ($request->has('text')) {
             Feedback::query()->create([
-                'text' => $request->validated('feedback_text'),
+                'text' => trim($request->validated('feedback_text')),
             ]);
         }
 

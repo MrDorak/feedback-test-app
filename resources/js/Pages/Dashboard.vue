@@ -9,9 +9,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(route('feedback.store'), {
-        onSuccess: () => form.reset('feedback_file'),
-    });
+    form.post(route('feedback.store'));
 };
 </script>
 

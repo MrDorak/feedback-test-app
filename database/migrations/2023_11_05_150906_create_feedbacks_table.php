@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string("address")->nullable();
             $table->string("appartments", 100)->nullable();
             $table->string("source", 50)->nullable();
+            $table->boolean("is_imported")->default(false);
             $table->timestamps();
         });
     }

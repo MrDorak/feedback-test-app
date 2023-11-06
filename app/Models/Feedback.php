@@ -19,7 +19,8 @@ class Feedback extends Model
         "start_date",
         "address",
         "appartments",
-        "source"
+        "source",
+        "is_imported"
     ];
 
     /**
@@ -29,5 +30,6 @@ class Feedback extends Model
      */
     protected $casts = [
         'start_date' => 'datetime',
+        'is_imported' => 'boolean'
     ];
 }
